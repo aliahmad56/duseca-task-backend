@@ -61,8 +61,9 @@ const showAllManagers = async (req, res) => {
 
 const showUserTasksByManager = async (req, res) => {
   try {
-    const { managerId } = req.params;
-
+    console.log('api hitting');
+    const managerId = req.userId;
+    console.log('manager id is', managerId);
     const users = await userModel.find({ managerId });
 
     if (users.length === 0) {
@@ -71,10 +72,10 @@ const showUserTasksByManager = async (req, res) => {
         message: 'No users found for this manager'
       });
     }
-    console.log('all the users are', users);
 
     // Get all tasks for the found users
     const userIds = users.map(user => user._id);
+
     const tasks = await taskModel.find({ userId: { $in: userIds } });
 
     return res.status(200).json({
